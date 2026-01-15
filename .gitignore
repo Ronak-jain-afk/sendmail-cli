@@ -1,0 +1,14 @@
+# Virtual env
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Build files
+dist/
+build/
+*.egg-info/
+
+# OS files
+.DS_Store
