@@ -15,7 +15,7 @@ def send_email(to, subject, message, is_html):
         "email": to,
         "subject": subject,
         "message": message,
-        "html": is_html   # 👈 new
+        "html": is_html   
     }
 
     headers = {
@@ -43,7 +43,7 @@ def main():
     parser.add_argument("subject")
     parser.add_argument("message")
 
-    # 👇 new flag
+    
     parser.add_argument(
         "--html",
         action="store_true",
