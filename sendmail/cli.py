@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import os
 import argparse
 import requests
 import sys
@@ -8,7 +8,11 @@ from rich.console import Console
 console = Console()
 
 WEBHOOK_URL = "http://localhost:5678/webhook/sendmail"
-API_KEY = "SENDMAIL_SECRET_9xA!23"
+API_KEY = os.getenv("SENDMAIL_API_KEY")
+if not API_KEY:
+    console.print("[bold red]ERROR: SENDMAIL_API_KEY not set[/bold red]")
+    sys.exit(1)
+
 
 def send_email(to, subject, message, is_html):
     payload = {
