@@ -7,11 +7,38 @@ from rich.console import Console
 
 console = Console()
 
-WEBHOOK_URL = "http://localhost:5678/webhook/sendmail"
-API_KEY = os.getenv("SENDMAIL_API_KEY")
+config = load_config()
+
+API_KEY = os.getenv("SENDMAIL_API_KEY") or config.get("API_KEY")
+WEBHOOK_URL = os.getenv("SENDMAIL_WEBHOOK") or config.get("WEBHOOK_URL")
+
 if not API_KEY:
-    console.print("[bold red]ERROR: SENDMAIL_API_KEY not set[/bold red]")
+    console.print("[bold red]ERROR: API key not set[/bold red]")
     sys.exit(1)
+
+if not WEBHOOK_URL:
+    console.print("[bold red]ERROR: Webhook URL not set[/bold red]")
+    sys.exit(1)
+
+
+
+def load_config():
+    path = os.path.expanduser("~/.sendmailrc")
+    config = {}
+
+    if not os.path.exists(path):
+        return config
+
+    with open(path) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            key, val = line.split("=", 1)
+            config[key.strip()] = val.strip()
+
+    return config
+
 
 
 def send_email(to, subject, message, is_html):
